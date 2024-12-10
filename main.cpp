@@ -7,6 +7,7 @@
 #include <stack>
 using namespace std;
 
+//amount of rounds
 const int ROUNDS = 10;
 
 //node for coffee sim
