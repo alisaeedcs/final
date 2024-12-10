@@ -41,6 +41,11 @@ void addMuffinCustomer(deque<Muffin>&, string, string);
 void serveMuffinCustomer(deque<Muffin>&);
 void outputMuffin(deque<Muffin>&);
 
+//bracelet
+void addBraceletCustomer(vector<Bracelet>&, string, string);
+void serveBraceletCustomer(vector<Bracelet>&);
+void outputBracelet(vector<Bracelet>&);
+
 
 int main() {
     srand(time(0));
@@ -48,17 +53,20 @@ int main() {
     string names[] = {"Mo", "Ali", "Omar", "Hannah", "Ben", "Sahil", "Najla", "Hanif", "Tom", "Nick", "Elizabeth", "Sarah"};
     string drinkOrders[] = {"Espresso", "Americano", "Latte", "Mocha", "Cappucino", "Cold Brew", "Chai"};
     string muffins[] = {"Blueberry", "Poppyseed", "Chocolate", "Red Velvet", "Banana"};
+    string bracelets[] = {"Red", "Orange", "Yellow", "Green", "Blue", "Purple"};
 
     //coffee booth queue
     Customer* head = nullptr;
-
     //muffin queue
     deque<Muffin> muffinQueue;
+    //bracelet queue
+    vector<Bracelet> braceletQueue;
     
     //initialize the coffee queue (3 customers) also the muffin
     for (int i = 0; i < 3; i++) {
         addCustomer(head, names[rand() % 12], drinkOrders[rand() % 7]);
         addMuffinCustomer(muffinQueue, names[rand() % 12], muffins[rand() % 5]);
+        addBraceletCustomer(braceletQueue, names[rand() % 12], bracelets[rand() % 6]);
     }
 
     for (int i = 1; i <= ROUNDS; i++) {
@@ -81,7 +89,12 @@ int main() {
         }
         outputMuffin(muffinQueue);
 
-
+        cout << "BRACELET BOOTH:\n";
+        serveBraceletCustomer(braceletQueue);
+        if (rand() % 2) {
+            addBraceletCustomer(braceletQueue, names[rand() % 12], bracelets[rand() % 6]);
+        }
+        outputBracelet(braceletQueue);
     }
 
     return 0;
@@ -128,7 +141,7 @@ void outputQueue(Customer* head) {
     }
 } 
 
-
+//muffin definitions
 void addMuffinCustomer(deque<Muffin>& queue, string name, string order) {
     queue.push_back(Muffin(name, order));
     cout << "\tAdded " << name << " to the muffin queue ordering a " << order << " muffin\n";
@@ -153,5 +166,32 @@ void outputMuffin(deque<Muffin>& queue) {
         cout << "\t\t " << count << ". " << customer.name << " ordered a " << customer.muffinType << " muffin.\n";
         count++;
     }
- 
+}
+
+//bracelet definitions
+void addBraceletCustomer(vector<Bracelet>& queue, string name, string color) {
+    queue.push_back(Bracelet(name,color));
+    cout << "\tAdded " << name << " to the bracelet queue ordering a " << color << " bracelet\n";
+}
+void serveBraceletCustomer(vector<Bracelet>& queue) {
+    if (queue.empty()) {
+        cout << "\tBracelet queue is empty.\n";
+        return;
+    }
+    Bracelet temp = queue.front();
+    cout << "\tServing " << temp.name << " a " << temp.color << " bracelet.\n";
+    queue.erase(queue.begin());
+}
+
+void outputBracelet(vector<Bracelet>& queue) {
+    if (queue.empty()) {
+        cout << "\tBracelet queue is empty.\n";
+        return;
+    }
+    cout << "\tBracelet queue:\n";
+    int count = 1;
+    for (auto& customer: queue) {
+        cout << "\t\t " << count << ". " << customer.name << " ordered a " << customer.color << " bracelet.\n";
+        count++;
+    }
 }
