@@ -39,6 +39,13 @@ int main() {
     //start simulation
     for (int i = 1; i <= ROUNDS; i++) {
         cout << "Round " << i << ":\n";
+        
+        if (head) {
+            serveCustomer(head);
+        }
+        else {
+
+        }
     }
 
     return 0;
@@ -46,12 +53,13 @@ int main() {
 
 void addCustomer(Customer*& head, string name, string order) {
     Customer* newCustomer = new Customer(name, order);
+    cout << "\tAdded " << newCustomer->name << " to the queue!\n";
     if (!head) {
         head = newCustomer;
     }
     else {
         Customer* temp = head;
-        while(temp->next) {
+        while(temp->next != nullptr) {
             temp = temp->next;
         }
         temp->next = newCustomer;
@@ -60,11 +68,11 @@ void addCustomer(Customer*& head, string name, string order) {
 
 void serveCustomer(Customer*& head) {
     if (!head) {
-        cout << "No customers in queue\n";
+        cout << "\tNo customers in queue\n";
         return;
     }
     Customer* temp = head;
-    cout << "Serving " << temp->name << " a " << temp->order << ".\n";
+    cout << "\tServing " << temp->name << " a " << temp->order << ".\n";
     head = head->next;
     delete temp;
 }
@@ -79,6 +87,7 @@ void outputQueue(Customer* head) {
     int count = 1;
     while (temp) {
         cout << "\t" << count << ". " << temp->name << ". Order: " << temp->order << endl;
+        temp = temp->next;
         count++;
     }
 } 
