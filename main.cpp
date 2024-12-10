@@ -1,6 +1,7 @@
 #include <iostream>
 #include <deque>
 #include <vector>
+#include <stack>
 using namespace std;
 
 const int ROUNDS = 10;
@@ -28,6 +29,13 @@ struct Bracelet {
     Bracelet(string n, string c) : name(n), color(c) {}
 };
 
+struct Boba {
+    string name;
+    string flavor;
+
+    Boba(string n, string f) : name(n), flavor(f) {}
+};
+
 //all for coffee under
 //add customer function
 void addCustomer(Customer*&, string, string);
@@ -46,6 +54,11 @@ void addBraceletCustomer(vector<Bracelet>&, string, string);
 void serveBraceletCustomer(vector<Bracelet>&);
 void outputBracelet(vector<Bracelet>&);
 
+//boba
+void addBoba(stack<Boba>&, string, string);
+void serveBobaCustomer(stack<Boba>&);
+void outputBoba(stack<Boba>&);
+
 
 int main() {
     srand(time(0));
@@ -54,6 +67,7 @@ int main() {
     string drinkOrders[] = {"Espresso", "Americano", "Latte", "Mocha", "Cappucino", "Cold Brew", "Chai"};
     string muffins[] = {"Blueberry", "Poppyseed", "Chocolate", "Red Velvet", "Banana"};
     string bracelets[] = {"Red", "Orange", "Yellow", "Green", "Blue", "Purple"};
+    string flavors[] = {"Taro", "Lychee", "Mango", "Strawberry", "Honeydew", "Milk Tea"};
 
     //coffee booth queue
     Customer* head = nullptr;
@@ -61,6 +75,8 @@ int main() {
     deque<Muffin> muffinQueue;
     //bracelet queue
     vector<Bracelet> braceletQueue;
+    //boba queue(stack)
+    stack<Boba> bobaQueue;
     
     //initialize the coffee queue (3 customers) also the muffin
     for (int i = 0; i < 3; i++) {
@@ -100,6 +116,8 @@ int main() {
     return 0;
 }
 
+
+//coffe definition
 void addCustomer(Customer*& head, string name, string order) {
     Customer* newCustomer = new Customer(name, order);
     cout << "\tAdded " << newCustomer->name << " to the coffee queue!\n";
@@ -194,4 +212,30 @@ void outputBracelet(vector<Bracelet>& queue) {
         cout << "\t\t " << count << ". " << customer.name << " ordered a " << customer.color << " bracelet.\n";
         count++;
     }
+}
+
+//boba definitions
+void addBoba(stack<Boba>& queue, string name, string flavor) {
+    queue.push(Boba(name, flavor));
+    cout << "\tAdded " << name << " to the boba queue ordering a " << flavor << " boba\n";
+}
+
+void serveBobaCustomer(stack<Boba>& queue) {
+    if (queue.empty()) {
+        cout << "\tBoba queue is empty.\n";
+        return;
+    }
+    Boba temp = queue.top();
+    cout << "\tServing " << temp.name << " a " << temp.flavor << " boba.\n";
+    queue.pop();
+}
+
+void outputBoba(stack<Boba>& queue) { 
+    if (queue.empty()) {
+        cout << "\tBoba queue is empty.\n";
+        return;
+    }
+    cout << "\tBoba queue:\n";
+    int count = 1;
+
 }
