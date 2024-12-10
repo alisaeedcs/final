@@ -1,3 +1,6 @@
+//COMSC-210 | Ali Saeed | FINAL
+//ide used: VSCODE
+
 #include <iostream>
 #include <deque>
 #include <vector>
