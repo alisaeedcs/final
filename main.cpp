@@ -15,6 +15,7 @@ struct Customer {
     Customer(string n, string o) : name(n), order(o), next(nullptr) {}
 };
 
+//struct for muffin booth sim
 struct Muffin {
     string name;
     string muffinType;
@@ -22,6 +23,7 @@ struct Muffin {
     Muffin(string n, string m) : name(n), muffinType(m) {}
 };
 
+//struct for bracelet booth sim
 struct Bracelet {
     string name;
     string color;
@@ -29,6 +31,7 @@ struct Bracelet {
     Bracelet(string n, string c) : name(n), color(c) {}
 };
 
+//struct for boba booth sim
 struct Boba {
     string name;
     string flavor;
@@ -45,19 +48,26 @@ void serveCustomer(Customer*&);
 void outputQueue(Customer*);
 
 //muffin
+//adds muffin customer
 void addMuffinCustomer(deque<Muffin>&, string, string);
+//serves muffin customer
 void serveMuffinCustomer(deque<Muffin>&);
+//outputs the muffin queue
 void outputMuffin(deque<Muffin>&);
 
 //bracelet
+//adds bracelet customer
 void addBraceletCustomer(vector<Bracelet>&, string, string);
+//serves bracelet customer
 void serveBraceletCustomer(vector<Bracelet>&);
+//outputs the bracelet queue
 void outputBracelet(vector<Bracelet>&);
 
 //boba
-void addBoba(stack<Boba>&, string, string);
+//adds boba customer
+void addBobaCustomer(stack<Boba>&, string, string);
 void serveBobaCustomer(stack<Boba>&);
-void outputBoba(stack<Boba>&);
+void outputBoba(stack<Boba>); //not by reference otherwise it will delete
 
 
 int main() {
@@ -78,11 +88,12 @@ int main() {
     //boba queue(stack)
     stack<Boba> bobaQueue;
     
-    //initialize the coffee queue (3 customers) also the muffin
+    //initialize the coffee queue (3 customers) also the muffin also the bracelet and also the boba
     for (int i = 0; i < 3; i++) {
         addCustomer(head, names[rand() % 12], drinkOrders[rand() % 7]);
         addMuffinCustomer(muffinQueue, names[rand() % 12], muffins[rand() % 5]);
         addBraceletCustomer(braceletQueue, names[rand() % 12], bracelets[rand() % 6]);
+        addBobaCustomer(bobaQueue, names[rand() % 12], flavors[rand() % 6]);
     }
 
     for (int i = 1; i <= ROUNDS; i++) {
@@ -111,8 +122,15 @@ int main() {
             addBraceletCustomer(braceletQueue, names[rand() % 12], bracelets[rand() % 6]);
         }
         outputBracelet(braceletQueue);
-    }
 
+        //boba booth
+        cout << "BOBA BOOTH:\n";
+        serveBobaCustomer(bobaQueue);
+        if (rand() % 2) {
+            addBobaCustomer(bobaQueue, names[rand() % 12], flavors[rand() % 6]);
+        }
+        outputBoba(bobaQueue);
+    }
     return 0;
 }
 
@@ -120,7 +138,7 @@ int main() {
 //coffe definition
 void addCustomer(Customer*& head, string name, string order) {
     Customer* newCustomer = new Customer(name, order);
-    cout << "\tAdded " << newCustomer->name << " to the coffee queue!\n";
+    cout << "\tAdded " << newCustomer->name << " to the coffee queue ordering a(n) " << order <<  "\n";
     if (!head) {
         head = newCustomer;
     }
@@ -215,7 +233,7 @@ void outputBracelet(vector<Bracelet>& queue) {
 }
 
 //boba definitions
-void addBoba(stack<Boba>& queue, string name, string flavor) {
+void addBobaCustomer(stack<Boba>& queue, string name, string flavor) {
     queue.push(Boba(name, flavor));
     cout << "\tAdded " << name << " to the boba queue ordering a " << flavor << " boba\n";
 }
@@ -230,12 +248,19 @@ void serveBobaCustomer(stack<Boba>& queue) {
     queue.pop();
 }
 
-void outputBoba(stack<Boba>& queue) { 
+void outputBoba(stack<Boba> queue) { 
     if (queue.empty()) {
         cout << "\tBoba queue is empty.\n";
         return;
     }
     cout << "\tBoba queue:\n";
     int count = 1;
-
+    //while the stack is not empty
+    while (!queue.empty()) {
+        Boba customer = queue.top();
+        //set to first in line or queue
+        cout << "\t\t " << count << ". " << customer.name << " ordered a " << customer.flavor << " boba.\n";
+        queue.pop(); //get rid of it, like a copy of it though
+        count++;
+    }
 }
